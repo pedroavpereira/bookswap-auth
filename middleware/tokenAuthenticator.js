@@ -16,7 +16,7 @@ const tokenAuthenticator = async (req, res, next) => {
         message: "Error in authentication",
       });
 
-    req.user = await User.findByUsername(data.username);
+    req.user = await User.findById(data.user_id);
     next();
   });
 };
