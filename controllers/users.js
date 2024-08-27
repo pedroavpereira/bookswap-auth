@@ -3,21 +3,23 @@ const jwt = require("jsonwebtoken");
 
 const Users = require("../models/User");
 
+const MONTH_IN_MS = 2592000000;
+
 const login = async (req, res) => {
   try {
     const data = req.body;
 
-    const user = await Users.findByUsername(data.username);
+    const user = await Users.findByEmail(data.email);
 
     const match = await bcrypt.compare(data.password, user.password);
 
     if (!match) throw new Error("Unable to authenticate");
 
     jwt.sign(
-      { username: user.username },
+      { user_id: user.user_id },
       process.env.SECRET_TOKEN,
       {
-        expiresIn: 3600,
+        expiresIn: MONTH_IN_MS,
       },
       (err, data) => {
         if (err) {
@@ -35,8 +37,8 @@ const login = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  console.log("signup");
   const data = req.body;
+  console.log("signup");
   try {
     const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS));
     data.password = await bcrypt.hash(data.password, salt);
@@ -44,10 +46,10 @@ const signup = async (req, res) => {
     const newUser = await Users.create(data);
 
     jwt.sign(
-      { username: newUser.username },
+      { user_id: newUser.user_id },
       process.env.SECRET_TOKEN,
       {
-        expiresIn: 3600,
+        expiresIn: MONTH_IN_MS,
       },
       (err, data) => {
         if (err) {
@@ -60,17 +62,25 @@ const signup = async (req, res) => {
       }
     );
   } catch (err) {
-    res.status(404).send({ success: false, error: err });
+    res.status(500).send({ success: false, error: err.message });
   }
 };
 
 const verifyToken = (req, res) => {
-  if (!req.user) {
+  if (req.user) {
+    const user = {
+      user_id: req.user.user_id,
+      email: req.user.email,
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      lat: req.user.lat,
+      lng: req.user.lng,
+    };
+    res.status(200).json({ success: true, user });
+  } else {
     res
       .status(401)
       .json({ success: false, message: "This route requires authentication" });
-  } else {
-    res.status(200).json({ success: true, user_id: req.user.id });
   }
 };
 
@@ -81,9 +91,16 @@ const restrictTo = (req, res) => {
     if (!allowedRoles.contains(req.user.role))
       throw new Error("Not Authorized");
 
-    res
-      .status(200)
-      .json({ success: true, user_id: req.user.id, role: req.user.role });
+    const user = {
+      user_id: req.user.user_id,
+      email: req.user.email,
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      lat: req.user.lat,
+      lng: req.user.lng,
+    };
+
+    res.status(200).json({ success: true, user });
   } catch (err) {
     res.status(401).json({ success: false, error: err.message });
   }
