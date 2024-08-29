@@ -27,7 +27,18 @@ const login = async (req, res) => {
             .status(500)
             .json({ success: false, error: "Error generating token" });
         } else {
-          res.status(200).json({ success: true, data: { token: data } });
+          res.status(200).json({
+            success: true,
+            token: data,
+            user: {
+              user_id: user.user_id,
+              email: user.email,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              lat: user.lat,
+              lng: user.lng,
+            },
+          });
         }
       }
     );
@@ -57,7 +68,18 @@ const signup = async (req, res) => {
             .status(500)
             .json({ success: false, error: "Error generating token" });
         } else {
-          res.status(200).json({ success: true, data: { token: data } });
+          res.status(200).json({
+            success: true,
+            token: data,
+            user: {
+              user_id: user.user_id,
+              email: user.email,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              lat: user.lat,
+              lng: user.lng,
+            },
+          });
         }
       }
     );
