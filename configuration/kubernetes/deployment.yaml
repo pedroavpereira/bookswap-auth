@@ -54,6 +54,16 @@ spec:
                 configMapKeyRef:
                   key: DB_PORT
                   name: db-configmap
+            - name: SALT_ROUND
+              valueFrom:
+                secretKeyRef:
+                  key: SALT_ROUND
+                  name: auth
+            - name: SECRET_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: SECRET_TOKEN
+                  name: auth
           resources:
             requests:
               cpu: 50m
