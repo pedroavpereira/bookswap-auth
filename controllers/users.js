@@ -110,7 +110,7 @@ const restrictTo = (req, res) => {
   try {
     const allowedRoles = req.body.allowedRoles;
 
-    if (!allowedRoles.contains(req.user.role))
+    if (!allowedRoles.includes(req.user.role))
       throw new Error("Not Authorized");
 
     const user = {
