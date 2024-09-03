@@ -5,6 +5,8 @@ const userRouter = require("./routes/user");
 
 const app = express();
 
+console.log(process.env);
+
 app.use(cors());
 app.use(express.json());
 
