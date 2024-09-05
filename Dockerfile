@@ -8,8 +8,6 @@ RUN npm install
 
 ENV PORT 5000
 ENV NODE_ENV production
-ENV SALT_ROUNDS 10
-ENV SECRET_TOKEN testing
 
 COPY . /app
 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: app
+    app: bookswap
     microservice: auth
   name: auth
   namespace: default
@@ -11,7 +11,7 @@ spec:
   minReadySeconds: 30
   selector:
     matchLabels:
-      app: app
+      app: bookswap
       microservice: auth
   strategy:
     rollingUpdate:
@@ -21,11 +21,11 @@ spec:
   template:
     metadata:
       labels:
-        app: app
+        app: bookswap
         microservice: auth
     spec:
       containers:
-        - image: pedroavpereiradev/auth:0.0.1
+        - image: pedroavpereiradev/book-swap-auth:latest
           imagePullPolicy: IfNotPresent
           name: auth
           env:
@@ -54,6 +54,16 @@ spec:
                 configMapKeyRef:
                   key: DB_PORT
                   name: db-configmap
+            - name: SALT_ROUND
+              valueFrom:
+                secretKeyRef:
+                  key: SALT_ROUNDS
+                  name: auth
+            - name: SECRET_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: SECRET_TOKEN
+                  name: auth
           resources:
             requests:
               cpu: 50m
@@ -68,7 +78,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: app
+    app: bookswap
     microservice: auth
   name: auth-load-balancer
   namespace: default
@@ -79,7 +89,7 @@ spec:
       port: 5000
       targetPort: 5000
   selector:
-    app: app
+    app: bookswap
     microservice: auth
   sessionAffinity: None
   type: LoadBalancer
