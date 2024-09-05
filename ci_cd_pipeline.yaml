@@ -78,5 +78,5 @@ stages:
               connectionType: 'kubernetesServiceConnection'
               kubernetesServiceConnection: 'kubectl-aws-connection'
               namespace: 'default'
-              manifests: '$(System.ArtifactDirectory)/configuration/kubernetes'
+              manifests: '$(System.ArtifactDirectory)/configuration/kubernetes/deployment.yaml'
               containers: 'pedroavpereiradev/book-swap-auth:$(tag)'
