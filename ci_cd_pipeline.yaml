@@ -68,7 +68,7 @@ stages:
               kubernetesServiceConnection: 'kubectl-aws-connection'
               namespace: 'default'
               secretType: 'generic'
-              secretName: 'token'
+              secretName: 'auth'
               secretArguments: '--from-literal=SECRET_TOKEN=$(SECRET_TOKEN),SALT_ROUNDS=$(SALT_ROUNDS)'
 
           - task: KubernetesManifest@1
