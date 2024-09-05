@@ -69,7 +69,7 @@ stages:
               namespace: 'default'
               secretType: 'generic'
               secretName: 'auth'
-              secretArguments: '--from-literal=SECRET_TOKEN=$(SECRET_TOKEN),SALT_ROUNDS=$(SALT_ROUNDS)'
+              secretArguments: '--from-literal=SECRET_TOKEN=$(SECRET_TOKEN) --from-literal=SALT_ROUNDS=$(SALT_ROUNDS)'
 
           - task: KubernetesManifest@1
             displayName: Deploy
