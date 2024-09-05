@@ -57,7 +57,7 @@ spec:
             - name: SALT_ROUND
               valueFrom:
                 secretKeyRef:
-                  key: SALT_ROUND
+                  key: SALT_ROUNDS
                   name: auth
             - name: SECRET_TOKEN
               valueFrom:
